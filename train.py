@@ -27,7 +27,7 @@ if __name__ == "__main__":
     m_model = DNN(para.layers)
     m_model = m_model.to(device)
     m_model.train()
-    
+    #233
     # 定义损失函数
     #loss_fun = categorical_crossentropy()
     loss_fun = nn.CrossEntropyLoss()
