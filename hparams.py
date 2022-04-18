@@ -5,10 +5,10 @@ made by XHU-WNCG
 class hparams():
     def __init__(self):
         self.small_img_path = "A:/BaiduNetdiskDownload/traindata/small_img"
+        self.img_path = "A:/BaiduNetdiskDownload/traindata/data1"
         self.file_scp = "scp/train.scp"
         self.target_excel_path = r"A:/BaiduNetdiskDownload/traindata/data2/target.csv"
         self.N_epoch = 10
-
         self.dim_in = [256, 256]
         self.in_channals = 3
         self.dim_out = 0
