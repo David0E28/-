@@ -37,7 +37,7 @@ def eval(model, test_X, test_Y):
 
     # para = hparams()
     #
-    # files = np.loadtxt(para.file_scp_test, dtype='str')
+    # files = np.loadtxt(para.train_file_scp_test, dtype='str')
     #
     # clean_files = files[:].tolist()
     #

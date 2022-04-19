@@ -23,10 +23,10 @@ class WNCG_Dataset(Dataset):
         self.left_top_y_position, self.right_bottom_x_position, self.right_bottom_x_position, \
         self.right_bottom_y_position,self.name = [], [], [], [], [], [], [], [], []
 
-        self.file_scp = para.file_scp
+        self.train_file_scp = para.train_file_scp
         self.target_files = para.target_excel_path
 
-        files = np.loadtxt(self.file_scp,dtype = 'str')
+        files = np.loadtxt(self.train_file_scp,dtype = 'str')
         self.clean_files = files[:].tolist()
 
         self.target_csv_files = pd.read_csv(self.target_files, encoding='ANSI')
