@@ -44,7 +44,7 @@ class Slide_Data():
     def __init__(self, para):
         self.number, self.center_x_position, self.center_y_position, self.left_top_x_position, \
         self.left_top_y_position, self.right_bottom_x_position, self.right_bottom_x_position, \
-        self.right_bottom_y_position, self.name = [], [], [], [], [], [], [], [], []
+        self.right_bottom_y_position, self.name, self.n_X, self.n_Y = [], [], [], [], [], [], [], [], [], [], []
 
 slide_data = Slide_Data(para)
 
@@ -67,16 +67,18 @@ for idx in range(len(m_Dataset.number)):  ##根据为标注过的数据
             while (window_y + n_Y * slide_y) < len(img[0]):
                 slide_window = img[n_X*slide_x:window_x + n_X*slide_x, n_Y*slide_y:window_y + n_Y*slide_y]         #滑动
                 slide_data.name.append(str( '_%d_%d_' % (n_X, n_Y) + m_Dataset.name[idx]))                         #命名
-                cv.imwrite(os.path.join(para.cut_data, slide_data.name[-1]), slide_window)
-                if window_x + n_X * slide_x > c and  window_x + n_X * slide_x < d and window_y + n_Y * slide_y > b and\
-                   window_y + n_Y * slide_y < a:
-                    slide_data.number.append(m_Dataset.number)
+                #cv.imwrite(os.path.join(para.cut_data, slide_data.name[-1]), slide_window)
+                if n_X * slide_x < c and  window_x + n_X * slide_x > d and window_y + n_Y * slide_y > b and\
+                   n_Y * slide_y < a:
+                    slide_data.number.append(m_Dataset.number[idx])
                     slide_data.center_x_position.append(int(m_Dataset.center_x_position[idx]))
                     slide_data.center_y_position.append(int(m_Dataset.center_y_position[idx]))
                     slide_data.right_bottom_x_position.append(int(m_Dataset.right_bottom_x_position[idx]))
                     slide_data.right_bottom_y_position.append(int(m_Dataset.right_bottom_y_position[idx]))
                     slide_data.left_top_x_position.append(int(m_Dataset.left_top_x_position[idx]))
                     slide_data.left_top_y_position.append(int(m_Dataset.left_top_y_position[idx]))
+                    slide_data.n_X.append(n_X)
+                    slide_data.n_Y.append(n_Y)
                 else:
                     slide_data.number.append(0)
                     slide_data.center_x_position.append('')
@@ -85,16 +87,20 @@ for idx in range(len(m_Dataset.number)):  ##根据为标注过的数据
                     slide_data.right_bottom_y_position.append('')
                     slide_data.left_top_x_position.append('')
                     slide_data.left_top_y_position.append('')
+                    slide_data.n_X.append('')
+                    slide_data.n_Y.append('')
 
                 n_Y = n_Y + 1
             n_X = n_X + 1
 
 
-dataframe = pd.DataFrame({'序号':range(len(slide_data.number)), '编号':slide_data.name, '类别':slide_data.number,
+dataframe = pd.DataFrame({'序号':range(len(slide_data.number)), '编号': slide_data.name, '类别': slide_data.number,
                           '中心x坐标': slide_data.center_x_position, '中心y坐标': slide_data.center_y_position,
                           "右上x坐标": slide_data.right_bottom_x_position, "右上y坐标": slide_data.right_bottom_y_position,
-                          "左下x坐标": slide_data.left_top_x_position, "左下y坐标": slide_data.left_top_y_position})
+                          "左下x坐标": slide_data.left_top_x_position, "左下y坐标": slide_data.left_top_y_position,
+                          'x700偏移': slide_data.n_X, 'y500偏移': slide_data.n_Y})
+
 
 #将DataFrame存储为csv,index表示是否显示行名，default=True， a模式使得循环读写不会覆盖上一次内容
-dataframe.to_csv(para.cut_csv, index=False, sep=',', mode='a')
+dataframe.to_csv(para.cut_csv, index=False, sep=',', )#mode = a
 
