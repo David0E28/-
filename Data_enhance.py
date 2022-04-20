@@ -5,7 +5,7 @@ made by XHU-WNCG
 import cv2 as cv
 import numpy as np
 import os
-import  pandas as pd
+import pandas as pd
 from hparams import hparams
 import matplotlib.pyplot as plt
 import random
@@ -55,14 +55,14 @@ newData = newData(para)
 
 """
 lacked_object :the lacked object you want to enhance ,but you can only enhance one object at a time .
-number : how many time you want spand object . number = ori_number * number
+number : how many times you want spand object . number = ori_number * number
 
 retrun : a newDate Type object
 """
 def Copy_and_paste(lacked_object, number):
-    def seamlessClone(out_path, obj,im, center, flag):
+    def seamlessClone(out_path, obj, im, center, flag):
     # Create an all white mask
-        mask = 255 * np.zeros(obj.shape, obj.dtype)
+        mask = 255 * np.ones(obj.shape, obj.dtype) ##cancel mask by np.zeros
 
     # Seamlessly clone src into dst and put the results in output
         if flag == 0:
@@ -76,11 +76,11 @@ def Copy_and_paste(lacked_object, number):
     # Write results
         cv.imwrite(out_path, clone)
 
-    if lacked_object == 0 :
+    if lacked_object == 0:
         print("编号0为白板呦")
         return
     for _ in range(number):
-            for idx in range(len(m_Dataset.number)):  ##根据为原标注过数据的
+            for idx in range(len(m_Dataset.number)):  ##根据为标注过的数据
 
                 Pick_a_board = random.randint(1, len(newData.EmptyBoard))
 
@@ -106,6 +106,7 @@ def Copy_and_paste(lacked_object, number):
 
                     #根据位移合成
                     newData.name.append(str(m_Dataset.number[idx])+'_'+newData.EmptyBoard[Pick_a_board])
+
 
                     newData.number.append(m_Dataset.number[idx])
 
@@ -133,12 +134,12 @@ Copy_and_paste(398, 1)
 
 
 
-dataframe = pd.DataFrame({'序号':range(len(newData.number)),'编号':newData.name,'类别':newData.number,
-                          '中心x坐标': newData.center_x_position,'中心y坐标': newData.center_y_position,
-                          "右上x坐标": newData.right_bottom_x_position,"右上y坐标": newData.right_bottom_y_position,
-                          "左下x坐标": newData.left_top_x_position,"左下y坐标": newData.left_top_y_position})
+dataframe = pd.DataFrame({'序号':range(len(newData.number)), '编号':newData.name, '类别':newData.number,
+                          '中心x坐标': newData.center_x_position, '中心y坐标': newData.center_y_position,
+                          "右上x坐标": newData.right_bottom_x_position, "右上y坐标": newData.right_bottom_y_position,
+                          "左下x坐标": newData.left_top_x_position, "左下y坐标": newData.left_top_y_position})
 
-#将DataFrame存储为csv,index表示是否显示行名，default=True
-dataframe.to_csv(para.enhanced_csv, index=False, sep=',',encoding='utf-8')
+#将DataFrame存储为csv,index表示是否显示行名，default=True， a模式使得循环读写不会覆盖上一次内容
+dataframe.to_csv(para.enhanced_csv, index=False, sep=',', mode='a')
 
 
