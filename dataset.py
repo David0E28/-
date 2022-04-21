@@ -10,7 +10,6 @@ from hparams import hparams
 import random
 import pandas as pd
 import cv2
-
 # 获取模型参数
 para = hparams()
     
@@ -21,10 +20,11 @@ class WNCG_Dataset(Dataset):
     def __init__(self, para):
         self.number, self.center_x_position, self.center_y_position, self.left_top_x_position,\
         self.left_top_y_position, self.right_bottom_x_position, self.right_bottom_x_position, \
-        self.right_bottom_y_position,self.name = [], [], [], [], [], [], [], [], []
+        self.right_bottom_y_position, self.name,  self.n_X, self.n_Y = [], [], [], [], [], [], [], [], [], [], []
 
         self.train_file_scp = para.train_file_scp
-        self.target_files = para.target_excel_path
+        #self.target_files = para.target_excel_path
+        self.target_files = para.cut_csv
 
         files = np.loadtxt(self.train_file_scp,dtype = 'str')
         self.clean_files = files[:].tolist()
@@ -34,12 +34,14 @@ class WNCG_Dataset(Dataset):
         for _ in self.target_csv_files:
             self.name.append(_[1])
             self.number.append(_[2])
-            self.center_x_position.append(_[4])
-            self.center_y_position.append(_[5])
-            self.left_top_x_position.append(_[6])
-            self.left_top_y_position.append(_[7])
-            self.right_bottom_x_position.append(_[8])
-            self.right_bottom_y_position.append(_[9])
+            self.center_x_position.append(_[3])
+            self.center_y_position.append(_[4])
+            self.left_top_x_position.append(_[5])
+            self.left_top_y_position.append(_[6])
+            self.right_bottom_x_position.append(_[7])
+            self.right_bottom_y_position.append(_[8])
+            self.n_X.append(_[9])
+            self.n_Y.append(_[10])
 
         print("训练数据量：", len(self.clean_files))
     
@@ -58,7 +60,13 @@ class WNCG_Dataset(Dataset):
 
 
         #  读取标签文件
-        target = self.number[idx]
+        target = []
+        target.append(self.number[idx])
+        target.append(self.center_x_position[idx])
+        target.append(self.center_y_position[idx])
+        target.append(self.left_top_x_position[idx] - self.center_x_position[idx])  ##上边到中点垂直距离
+        target.append(self.left_top_y_position[idx] - self.center_y_position[idx])  ##上边到中点垂直距离
+        print(target)
         target = np.array(target, dtype=np.float32)
         target = np.expand_dims(target, 0)  ##扩充dim，否则无法形成batch（ tensor（1）-》tensor（[1]） ）
 
@@ -97,17 +105,17 @@ class WNCG_Dataset(Dataset):
         }
         #One_hot[dict.get(target[0])] = 1
 
-        Two_hot = np.zeros(1)
-        if(target[0] != 0):
-            Two_hot = 1
-            Two_hot = np.expand_dims(Two_hot, 0)
+        # Two_hot = np.zeros(1)
+        # if(target[0] != 0):
+        #     Two_hot = 1
+        #     Two_hot = np.expand_dims(Two_hot, 0)
 
 
 
         # 转为torch格式
         X_train = torch.from_numpy(img_cv)
         #Y_target = torch.Tensor(Two_hot)
-        Y_target = torch.from_numpy(Two_hot)
+        Y_target = torch.from_numpy(target)
 
         return X_train.float(), Y_target.float()
 

@@ -8,7 +8,7 @@ from hparams import hparams
 from torch.utils.data import Dataset,DataLoader
 from dataset import WNCG_Dataset
 from model_FPN import FPN, DNN
-from loss_F import categorical_crossentropy
+from loss_F import YOLOV1
 import os
 import time
 import torch.optim as optim
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     #233
     # 定义损失函数
     #loss_fun = categorical_crossentropy()
-    loss_fun = nn.CrossEntropyLoss()
+    loss_fun = YOLOV1()
     loss_fun = loss_fun.to(device)
     
     # 定义优化器

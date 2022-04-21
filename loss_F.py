@@ -19,3 +19,10 @@ class categorical_crossentropy(nn.Module):
 
 
       return loss
+
+class YOLOV1(nn.Module):
+  def __init__(self):
+     super(YOLOV1, self).__init__()
+  def forward(self, input, target):
+
+      return

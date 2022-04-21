@@ -10,7 +10,7 @@ class hparams():
         self.img_path = "A:/BaiduNetdiskDownload/traindata/data1"             #原照片，题给
         self.cut_data = "A:/BaiduNetdiskDownload/traindata/cut_data"          #滑窗裁剪后的照片地址
         #scp
-        self.train_file_scp = "scp/train.scp"                                 #题给照片地址scp格式
+        self.train_file_scp = "scp/train.scp"                                 #训练照片地址scp格式
         self.origin_file_scp = "scp/data_enhancement.scp"                     #题给白板地址scp格式
         #csv
         self.target_excel_path = r"A:/BaiduNetdiskDownload/traindata/data2/target.csv"               #照片标注数据，题给
@@ -20,6 +20,11 @@ class hparams():
 
         # for enhancement data folder
         self.enhanced_data = 'A:/BaiduNetdiskDownload/traindata/enhanced_data'         #增强的照片放入这里
+
+        self.window_y = 1200
+        self.window_x = 1200
+        self.slide_x = 300
+        self.slide_y = 300
 
         self.N_epoch = 10
         self.dim_in = [256, 256]

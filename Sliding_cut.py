@@ -48,10 +48,10 @@ class Slide_Data():
 
 slide_data = Slide_Data(para)
 
-window_y = 1000  #faster-rcnn input
-window_x = 1000 #faster-rcnn input 大约1e6个像素
-slide_x = 700
-slide_y = 500
+window_y = para.window_y  #faster-rcnn input
+window_x = para.window_x #faster-rcnn input 大约1e6个像素
+slide_x = para.slide_x
+slide_y = para.slide_y
 
 for idx in range(len(m_Dataset.number)):  ##根据为标注过的数据
     if m_Dataset.number[idx] != 0:
@@ -66,10 +66,10 @@ for idx in range(len(m_Dataset.number)):  ##根据为标注过的数据
             n_Y = 0
             while (window_y + n_Y * slide_y) < len(img[0]):
                 slide_window = img[n_X*slide_x:window_x + n_X*slide_x, n_Y*slide_y:window_y + n_Y*slide_y]         #滑动
-                slide_data.name.append(str( '_%d_%d_' % (n_X, n_Y) + m_Dataset.name[idx]))                         #命名
                 #cv.imwrite(os.path.join(para.cut_data, slide_data.name[-1]), slide_window)
-                if n_X * slide_x < c and  window_x + n_X * slide_x > d and window_y + n_Y * slide_y > b and\
-                   n_Y * slide_y < a:
+                if n_X * slide_x <= c and window_x + n_X * slide_x >= d and window_y + n_Y * slide_y >= b and\
+                   n_Y * slide_y <= a:
+                    slide_data.name.append(str('_%d_%d_' % (n_X, n_Y) + m_Dataset.name[idx]))  # 命名
                     slide_data.number.append(m_Dataset.number[idx])
                     slide_data.center_x_position.append(int(m_Dataset.center_x_position[idx]))
                     slide_data.center_y_position.append(int(m_Dataset.center_y_position[idx]))
@@ -79,16 +79,17 @@ for idx in range(len(m_Dataset.number)):  ##根据为标注过的数据
                     slide_data.left_top_y_position.append(int(m_Dataset.left_top_y_position[idx]))
                     slide_data.n_X.append(n_X)
                     slide_data.n_Y.append(n_Y)
-                else:
-                    slide_data.number.append(0)
-                    slide_data.center_x_position.append('')
-                    slide_data.center_y_position.append('')
-                    slide_data.right_bottom_x_position.append('')
-                    slide_data.right_bottom_y_position.append('')
-                    slide_data.left_top_x_position.append('')
-                    slide_data.left_top_y_position.append('')
-                    slide_data.n_X.append('')
-                    slide_data.n_Y.append('')
+                    cv.imwrite(os.path.join(para.cut_data, slide_data.name[-1]), slide_window)
+                # else:
+                #     slide_data.number.append(0)
+                #     slide_data.center_x_position.append('')
+                #     slide_data.center_y_position.append('')
+                #     slide_data.right_bottom_x_position.append('')
+                #     slide_data.right_bottom_y_position.append('')
+                #     slide_data.left_top_x_position.append('')
+                #     slide_data.left_top_y_position.append('')
+                #     slide_data.n_X.append('')
+                #     slide_data.n_Y.append('')
 
                 n_Y = n_Y + 1
             n_X = n_X + 1
