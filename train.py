@@ -8,7 +8,7 @@ from hparams import hparams
 from torch.utils.data import Dataset,DataLoader
 from dataset import WNCG_Dataset
 from model_FPN import FPN, DNN
-from loss_F import YOLOV1
+from loss_F import Faster_RCNN_Loss
 import os
 import time
 import torch.optim as optim
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     #233
     # 定义损失函数
     #loss_fun = categorical_crossentropy()
-    loss_fun = YOLOV1()
+    loss_fun = Faster_RCNN_Loss()
     loss_fun = loss_fun.to(device)
     
     # 定义优化器
@@ -71,6 +71,7 @@ if __name__ == "__main__":
 
 
             # 计算损失函数
+            print(output.shape,train_Y.shape)
             loss = loss_fun.forward(output, train_Y.long())
             loss.requires_grad_(True)
             # 误差反向传播

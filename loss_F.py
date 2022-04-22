@@ -20,9 +20,22 @@ class categorical_crossentropy(nn.Module):
 
       return loss
 
-class YOLOV1(nn.Module):
+class Faster_RCNN_Loss(nn.Module):
   def __init__(self):
-     super(YOLOV1, self).__init__()
-  def forward(self, input, target):
+     super(Faster_RCNN_Loss, self).__init__()
+  def cls_F(self, input, target):
+
+     loss = 0
+     N_cls = 29
+
+     def GT(p, p_):
+         if p == p_:return 1
+         return 0
+
+     for _ in range(len(input)-1):
+
+
+
+
 
       return

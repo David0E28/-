@@ -133,7 +133,7 @@ class DNN(nn.Module):
         self.lin1 = nn.Linear(in_features=256, out_features=128) ##in_feature = W
         self.lin2 = nn.Linear(in_features=128, out_features=1) ##
         self.lin3 = nn.Linear(in_features=para.in_channals * 256 * 1, out_features=32)  ##
-        self.lin4 = nn.Linear(in_features=32, out_features=2)
+        self.lin4 = nn.Linear(in_features=32, out_features=5)
         self.dropout = nn.Dropout(0.2)
 
     def forward(self, x):   #(N, C, H, W)
@@ -149,7 +149,7 @@ class DNN(nn.Module):
 
 
 
-        
+
 if __name__ == "__main__":
     para = hparams()
     m_model = FPN([2,6,9,3])
